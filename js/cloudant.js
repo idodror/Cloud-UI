@@ -1,6 +1,6 @@
 var loginServicePath = "http://localhost:5010";//"https://myloginservice.eu-gb.mybluemix.net/";
 var filesServicePath = "http://localhost:5000";//"https://myfilesservice.eu-gb.mybluemix.net/";
-var manageServicePath = "http://localhost:5030";//"https://myloginservice.eu-gb.mybluemix.net/";
+var manageServicePath = "http://localhost:5100";//"https://myloginservice.eu-gb.mybluemix.net/";
 var cred = "0677dc4a-00da-46cd-97db-f627e643765e-bluemix:137c1cea45ee9a1ee20523e99f21c3086ebd7f37392def5e1bb3a4a1ffc9dc9c";
 
 function postDocument(doc, path, whatwedid) {
@@ -29,13 +29,12 @@ function postDocument(doc, path, whatwedid) {
 
       if (whatwedid == "upload") {
         if (r.response == "Upload Succeeded") {
-          var html = '<div class="col-sm-6 col-md-4">' + 
-          '<a class="lightbox" href="./images/park.jpg">' + 
-            localStorage.getItem("uploadedImage") +
-              '</a>' +
-              '</div>';
-          $(".imagesList").append(html)
+          location.reload()
         }
+      }
+
+      if (whatwedid == "share") {
+        alert(r.response)
       }
 
     }
@@ -88,10 +87,10 @@ function encodeImageFileAsURL() {
     fileReader.onload = function(fileLoadedEvent) {
       var srcData = fileLoadedEvent.target.result; // <--- data: base64
 
-      var newImage = document.createElement('img');
-      newImage.src = srcData;
+      //var newImage = document.createElement('img');
+      //newImage.src = srcData;
 
-      uploadImage(newImage.outerHTML);
+      uploadImage(srcData);
 
       //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
       //alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
@@ -114,22 +113,48 @@ function getDocument(path, whatwedid) {
         var list = "{ \"list\" :" + r.response + "}";
         var json2 = JSON.parse(list);
         console.log(json1.length);
+        var i = 0;
         json1.forEach(function(obj) {
           var html = '<div class="col-sm-6 col-md-4 lightbox">' + 
-          '<a class="button lightbox" href="javascript:manageImage(' + obj._id + ')">' +
-            obj.data +
-              '</div>';
+                    '<img src="' + obj.data + '">' +
+                    '<br>' +
+                    '<span class="col-sm-6" align="center">' +
+                    '<a id="' + obj._id + '" href="#" onclick="shareImg(this.id)">  Share  </a>' +
+                    '</span>' +
+                    '<span class="col-sm-6" align="center">' +
+                    '<a id="' + obj._id + '" href="#" onclick="deleteImg(this.id)">  Delete  </a>' +
+                    '</span>' +
+                    '<span id="rev" hidden>' + obj._rev + '</span>' +
+                    '</div>';
           $(".imagesList").append(html)
+          localStorage.setItem("image" + i, obj._id);
          });
+
+
       }
     }
   }
   r.send();
 }
 
-function manageImage(imgId) {
-  localStorage.setItem("currentImage", imgId);
-  window.location.href = "./manageImage.html";
+// i, imgid, to
+
+function shareImg(_id) {
+  var person = prompt("Please enter username you want to share with:", "");
+  if (person != null && person != "") {
+    var doc = {};
+    doc._id = localStorage.getItem("username");
+    doc.imgId = _id;
+    doc.toUser = person;
+  
+    postDocument(doc, manageServicePath + "/ShareFile", "share");
+  }
+  console.log(_id)
+}
+
+function deleteImg(_id) {
+  deleteDocument(_id, filesServicePath + "/api/Files/Delete")
+  //console.log(_id)
 }
 
 function getList() {
@@ -138,32 +163,21 @@ function getList() {
 }
 
 
-function deleteDocument(id,rev) {
+function deleteDocument(id, path) {
   var r = new XMLHttpRequest();
-  r.open("DELETE",dbPath+"/"+id+"?rev="+rev,true);
+  r.open("DELETE", path + "/" + id, true);
   r.setRequestHeader("Authorization","Basic " +btoa(cred));
 
   r.onreadystatechange = function() {
     if(r.readyState == 4 && r.status == 200) {
-     console.log(r.response);
+      if (r.response == 1) {
+        alert("Image deleted successfully")
+        location.reload();
+      }
     }
   }
   r.send();
 }
-
-function updateDocument(id, rev, doc) {
-  var r = new XMLHttpRequest();
-  r.open("PUT", dbPath+"/"+id+"?rev="+rev);
-  r.setRequestHeader("Authorization","Basic " +btoa(cred));
-
-  r.onreadystatechange = function() {
-    if(r.readyState == 4 && r.status == 200) {
-     console.log(r.response);
-    }
-  }
-  r.send(doc);
-}
-
 
 function signOut() {
   localStorage.removeItem("username");
