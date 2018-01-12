@@ -12,7 +12,8 @@
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
     <link rel="stylesheet" href="gallery-grid.css">
-	<link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="../css/style.css" media="screen" type="text/css" />
 
 
 </head>
@@ -20,6 +21,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
         <script src="../js/jquery-3.2.1.min.js"></script>
         <script src="../js/cloudant.js"></script>
+
 
         <script>
             baguetteBox.run('.tz-gallery');
@@ -31,25 +33,14 @@
     </script>
 
 <div class="container gallery-container">
-	<ul>
-		<li><a href="gallery.html">Home</a></li>
-		<li><a>Manage</a>
-			<ul>
-				<li><a>Share</a></li>
-				<li><a>Delete</a></li>
-			</ul>
-		</li>
-		<li><a href="javascript:signOut();">SignOut</a></li>
-	</ul>
 </br>
     <h1>upMe :)</h1>
-
+    <div class="login-help">
+            <a href="javascript:signOut();">Sign out</a>
+    </div>
     <p class="page-description text-center">Free share and stored your photos</p>
 
     <p class="page-description text-center"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></p>
-
-
-    <div id="imgTest"></div>
     
     <div class="tz-gallery">
 

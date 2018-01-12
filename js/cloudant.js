@@ -109,25 +109,23 @@ function getDocument(path, whatwedid) {
   r.onreadystatechange = function() {
     if (r.readyState == 4 && r.status == 200) {
       if (r.response != null) {
-        var json1 = JSON.parse(r.response);
-        var list = "{ \"list\" :" + r.response + "}";
-        var json2 = JSON.parse(list);
-        console.log(json1.length);
-        var i = 0;
-        json1.forEach(function(obj) {
+        var jsonArray = JSON.parse(r.response);
+        console.log(jsonArray.length);
+        jsonArray.forEach(function(obj) {
           var html = '<div class="col-sm-6 col-md-4 lightbox">' + 
-                    '<img src="' + obj.data + '">' +
+                    '<span class="col-sm-4" align="center">' +
+                    '<a id="' + obj._id + '" href="#" onclick="shareImg(this.id)">Share</a>' +
+                    '</span>' +
+                    '<span class="col-sm-4" align="center">' +
+                    '<a id="' + obj._id + '" href="#" onclick="deleteImg(this.id)">Delete</a>' +
+                    '</span>' +
+                    '<span class="col-sm-4" align="center">' +
+                    '<a href="' + obj.data + '" download="image.jpg">Download</a>' +
+                    '</span>' +
                     '<br>' +
-                    '<span class="col-sm-6" align="center">' +
-                    '<a id="' + obj._id + '" href="#" onclick="shareImg(this.id)">  Share  </a>' +
-                    '</span>' +
-                    '<span class="col-sm-6" align="center">' +
-                    '<a id="' + obj._id + '" href="#" onclick="deleteImg(this.id)">  Delete  </a>' +
-                    '</span>' +
-                    '<span id="rev" hidden>' + obj._rev + '</span>' +
+                    '<img src="' + obj.data + '">' +
                     '</div>';
           $(".imagesList").append(html)
-          localStorage.setItem("image" + i, obj._id);
          });
 
 
