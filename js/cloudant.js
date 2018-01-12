@@ -1,6 +1,6 @@
-var loginServicePath = "http://localhost:5010";//"https://myloginservice.eu-gb.mybluemix.net/";
-var filesServicePath = "http://localhost:5000";//"https://myfilesservice.eu-gb.mybluemix.net/";
-var manageServicePath = "http://localhost:5100";//"https://myloginservice.eu-gb.mybluemix.net/";
+var loginServicePath = "https://myloginservice.eu-gb.mybluemix.net/";
+var filesServicePath = "https://myfilesservice.eu-gb.mybluemix.net/";
+var manageServicePath = "https://mymanageservice.eu-gb.mybluemix.net/";
 var cred = "0677dc4a-00da-46cd-97db-f627e643765e-bluemix:137c1cea45ee9a1ee20523e99f21c3086ebd7f37392def5e1bb3a4a1ffc9dc9c";
 
 function postDocument(doc, path, whatwedid) {
@@ -67,8 +67,7 @@ function createNewUser() {
 
 function uploadImage(encodedImage) {
     var r = new XMLHttpRequest();
-    var doc = {}; //create an empty json object.
-    //var encodedImage = encodeImageFileAsURL()
+    var doc = {};
     doc._id = localStorage.getItem("username");
     doc.data = encodedImage;
     localStorage.setItem("uploadedImage", encodedImage);
@@ -77,7 +76,6 @@ function uploadImage(encodedImage) {
 }
 
 function encodeImageFileAsURL() {
-
   var filesSelected = document.getElementById("inputFileToLoad").files;
   if (filesSelected.length > 0) {
     var fileToLoad = filesSelected[0];
@@ -86,17 +84,9 @@ function encodeImageFileAsURL() {
 
     fileReader.onload = function(fileLoadedEvent) {
       var srcData = fileLoadedEvent.target.result; // <--- data: base64
-
-      //var newImage = document.createElement('img');
-      //newImage.src = srcData;
-
       uploadImage(srcData);
-
-      //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
-      //alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
-      //console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
     }
-    fileReader.readAsDataURL(fileToLoad);
+  fileReader.readAsDataURL(fileToLoad);
   }
 }
 
@@ -135,8 +125,6 @@ function getDocument(path, whatwedid) {
   r.send();
 }
 
-// i, imgid, to
-
 function shareImg(_id) {
   var person = prompt("Please enter username you want to share with:", "");
   if (person != null && person != "") {
@@ -152,7 +140,6 @@ function shareImg(_id) {
 
 function deleteImg(_id) {
   deleteDocument(_id, filesServicePath + "/api/Files/Delete")
-  //console.log(_id)
 }
 
 function getList() {
