@@ -1,6 +1,6 @@
-var loginServicePath = "https://myloginservice.eu-gb.mybluemix.net/";
-var filesServicePath = "https://myfilesservice.eu-gb.mybluemix.net/";
-var manageServicePath = "https://mymanageservice.eu-gb.mybluemix.net/";
+var loginServicePath = "https://myloginservice.eu-gb.mybluemix.net";
+var filesServicePath = "https://myfilesservice.eu-gb.mybluemix.net";
+var manageServicePath = "https://mymanageservice.eu-gb.mybluemix.net";
 var cred = "0677dc4a-00da-46cd-97db-f627e643765e-bluemix:137c1cea45ee9a1ee20523e99f21c3086ebd7f37392def5e1bb3a4a1ffc9dc9c";
 
 function postDocument(doc, path, whatwedid) {
